@@ -30,7 +30,6 @@
 
 <script>
 import axios from "axios";
-const API_URL = "https://firestore.googleapis.com/v1/projects/vuejs-axios-88c40/databases/(default)/documents/comments";
 export default {
   data() {
     return {
@@ -40,7 +39,7 @@ export default {
     };
   },
   created() {
-    axios.get(API_URL).then((response) => {
+    axios.get("/comments").then((response) => {
       this.posts = response.data.documents;
       console.log(response.data.documents);
     });
@@ -48,7 +47,7 @@ export default {
   methods: {
     createComment() {
       axios
-        .post(API_URL, {
+        .post("/comments", {
           fields: {
             name: {
               stringValue: this.name,
