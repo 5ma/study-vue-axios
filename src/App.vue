@@ -7,7 +7,15 @@
     <label for="comment">コメント：</label>
     <textarea id="comment" v-model="comment"></textarea><br />
     <br />
-    <button type="button" @click="createComment(); resetForm()">コメントをサーバーに送る</button>
+    <button
+      type="button"
+      @click="
+        createComment();
+        resetForm();
+      "
+    >
+      コメントをサーバーに送る
+    </button>
 
     <h2>掲示板</h2>
   </div>
@@ -15,6 +23,7 @@
 
 <script>
 import axios from "axios";
+const API_URL = "https://firestore.googleapis.com/v1/projects/vuejs-axios-88c40/databases/(default)/documents/comments";
 export default {
   data() {
     return {
@@ -22,10 +31,15 @@ export default {
       comment: "",
     };
   },
+  created() {
+    axios.get(API_URL).then((response) => {
+      console.log(response);
+    });
+  },
   methods: {
     createComment() {
       axios
-        .post("https://firestore.googleapis.com/v1/projects/vuejs-axios-88c40/databases/(default)/documents/comments", {
+        .post(API_URL, {
           fields: {
             name: {
               stringValue: this.name,
@@ -45,7 +59,7 @@ export default {
     resetForm() {
       this.name = "";
       this.comment = "";
-    }
+    },
   },
 };
 </script>
