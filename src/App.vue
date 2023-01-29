@@ -18,6 +18,13 @@
     </button>
 
     <h2>掲示板</h2>
+    <ul>
+      <li v-for="post in posts" :key="post.name">
+        <div>名前：{{ post.fields.name.stringValue }}</div>
+        <div>コメント：{{ post.fields.comment.stringValue }}</div>
+        <br />
+      </li>
+    </ul>
   </div>
 </template>
 
@@ -29,11 +36,13 @@ export default {
     return {
       name: "",
       comment: "",
+      posts: [],
     };
   },
   created() {
     axios.get(API_URL).then((response) => {
-      console.log(response);
+      this.posts = response.data.documents;
+      console.log(response.data.documents);
     });
   },
   methods: {
