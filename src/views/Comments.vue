@@ -30,6 +30,7 @@
 
 <script>
 import axios from "axios";
+import { mapGetters } from "vuex";
 export default {
   data() {
     return {
@@ -39,24 +40,41 @@ export default {
     };
   },
   created() {
-    axios.get("/comments").then((response) => {
-      this.posts = response.data.documents;
-      console.log(response.data.documents);
-    });
+    axios
+      .get("/comments", {
+        headers: {
+          Authorization: `Bearer ${this.idToken}`,
+        },
+      })
+      .then((response) => {
+        this.posts = response.data.documents;
+        console.log(response.data.documents);
+      });
+  },
+  computed: {
+    ...mapGetters(["idToken"]),
   },
   methods: {
     createComment() {
       axios
-        .post("/comments", {
-          fields: {
-            name: {
-              stringValue: this.name,
-            },
-            comment: {
-              stringValue: this.comment,
+        .post(
+          "/comments",
+          {
+            fields: {
+              name: {
+                stringValue: this.name,
+              },
+              comment: {
+                stringValue: this.comment,
+              },
             },
           },
-        })
+          {
+            headers: {
+              Authorization: `Bearer ${this.idToken}`,
+            },
+          }
+        )
         .then((response) => {
           console.log(response);
         })
